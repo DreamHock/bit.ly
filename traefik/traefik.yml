@@ -1,0 +1,28 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+entryPoints:
+  web:
+    address: ":80"  # HTTP
+  websecure:
+    address: ":443" # HTTPS
+
+api:
+  dashboard: true   # Enable the web dashboard
+  insecure: true    # Allow dashboard access without authentication (development only!)
+
+# Where Traefik finds service information
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"  # Docker socket
+    exposedByDefault: false                   # Only expose services with traefik.enable=true
+    network: traefik                         # Default network for services
+
+# Logging
+log:
+  level: INFO
+  filePath: /var/log/traefik/traefik.log
+# Access logs
+accessLog:
+  filePath: /var/log/traefik/access.log

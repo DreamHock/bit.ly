@@ -1,0 +1,33 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	http_port {$HTTP_PORT:80}
+	https_port {$HTTPS_PORT:443}
+
+	# Bind admin API to all interfaces so Prometheus can reach it from Docker network
+	admin 0.0.0.0:2019
+	# Prometheus metrics are available at :2019/metrics by default
+
+	frankenphp {
+		{$FRANKENPHP_CONFIG}
+		# num_threads 2
+		# php_ini memory_limit 1024M
+	}
+
+	# https://caddyserver.com/docs/caddyfile/directives#sorting-algorithm
+	order mercure after encode
+	order vulcain after reverse_proxy
+	order php_server before file_server
+	order php before file_server
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+{$SERVER_NAME:localhost} {
+	root * public/
+	encode zstd br gzip
+
+	{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+	php_server 
+}

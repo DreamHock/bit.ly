@@ -1,0 +1,15 @@
+# write-service.localhost {
+# 	reverse_proxy write-service:8080
+# }
+
+# read-service.localhost {
+# 	reverse_proxy read-service:8080
+# }
+
+url-shortener.localhost {
+	reverse_proxy /api/* write-service:8080
+	reverse_proxy /* read-service:8080
+	# php_server {
+	# 	num_threads 2
+	# }
+}

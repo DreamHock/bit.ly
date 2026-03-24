@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s      # How often to scrape targets
+  evaluation_interval: 15s  # How often to evaluate rules
+
+scrape_configs:
+  # Scrape Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Scrape Caddy metrics from the read-service (FrankenPHP)
+  - job_name: 'caddy-read-service'
+    static_configs:
+      - targets: ['read-service:2019']
+    metrics_path: /metrics
+
+  # Scrape Caddy metrics from the write-service (FrankenPHP)
+  - job_name: 'caddy-write-service'
+    static_configs:
+      - targets: ['write-service:2019']
+    metrics_path: /metrics
